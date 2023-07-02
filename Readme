@@ -1,0 +1,18 @@
+Pre-requisites
+1. Redis Server
+For Windows User, sub Linux system is required to run Redis. See details: https://redis.io/docs/getting-started/installation/install-redis-on-windows/
+2. Redis Json
+Enable Redis support for json object. Recommend build from source: https://redis.io/docs/stack/json/
+3. pip install requirements.dev to install all dependencies
+
+Quick Start
+1. python main.py to run the application
+2. Route to swagger UI: http://127.0.0.1:8080/docs
+3. Route to tokenize: http://127.0.0.1:8080/tokenize
+4. Route to detokenize: http://127.0.0.1:8080/detokenize
+
+Features in development:
+1. Swagger documents to include 401 and 403 return
+2. Introduce JWT tokens for authorization
+3. Introduce auto generated tokens for data tokenization
+
