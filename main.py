@@ -56,7 +56,8 @@ class Tokenize(Resource):
 @api.route('/detokenize', methods=['POST'])
 class DeTokenize(Resource):
     @api.expect(input_fields)
-    def post(self):
+    @token_required
+    def post(self, current_user):
         data_category = api.payload['data_category']
         data = api.payload['data']
         return tokenize(conn, data_category, data, reverse=True)
