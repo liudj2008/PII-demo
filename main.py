@@ -16,13 +16,7 @@ api = Api(
     description='PII data API demo'
 )
 
-input_fields = api.model('Resource', {
-    'data_category': fields.String(),
-    'data': fields.Nested(api.model('data', {
-        'ssn': fields.String(),
-        'address': fields.String()
-    }))
-})
+input_fields = api.model('Resource', {})
 
 input_field_login = api.model('UserId', {
     'user_id': fields.Integer()
@@ -48,9 +42,17 @@ class Tokenize(Resource):
     @api.expect(input_fields)
     @token_required
     def post(self, current_user):
-        data_category = api.payload['data_category']
-        data = api.payload['data']
-        return tokenize(conn, data_category, data, reverse=False)
+        response = []
+
+        for item in api.payload['input']:
+            data_category = item['data_category']
+            data = item['data']
+            data_tokenized = tokenize(conn, data_category, data, reverse=False)
+            response.append({
+                'data_category': data_category,
+                'data': data_tokenized
+            })
+        return response
 
 
 @api.route('/detokenize', methods=['POST'])
@@ -58,9 +60,17 @@ class DeTokenize(Resource):
     @api.expect(input_fields)
     @token_required
     def post(self, current_user):
-        data_category = api.payload['data_category']
-        data = api.payload['data']
-        return tokenize(conn, data_category, data, reverse=True)
+        response = []
+
+        for item in api.payload['input']:
+            data_category = item['data_category']
+            data = item['data']
+            data_detokenized = tokenize(conn, data_category, data, reverse=True)
+            response.append({
+                'data_category': data_category,
+                'data': data_detokenized
+            })
+        return response
 
 
 # main driver function
